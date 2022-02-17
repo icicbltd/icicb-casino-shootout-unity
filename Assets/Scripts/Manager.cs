@@ -27,7 +27,7 @@ public class Manager : MonoBehaviour
     public GameObject ballbutton;
     public GameObject Ball;
     BetPlayer _player;
-    private string BaseUrl = "http://192.168.115.172:5000";
+    private string BaseUrl = "http://153.92.214.184:3306";
     void Start()
     {
         betAmount = 10f;
@@ -42,7 +42,7 @@ public class Manager : MonoBehaviour
     }
     void Update()
     {
-        if (goal_number == 0)
+        if (goal_number == 0 || !disable_random.interactable)
         {
             disable_cash.interactable = false;
         }
@@ -147,7 +147,6 @@ public class Manager : MonoBehaviour
         Alert.text = "";
         flag = 1;
         betAmount = float.Parse(BetAmount.text);
-        Debug.Log("1");
         if (betAmount < 10)
         {
             betAmount = 10;
@@ -217,6 +216,7 @@ public class Manager : MonoBehaviour
     IEnumerator Server(int num)
     {
         WWWForm form = new WWWForm();
+        form.AddField("num", num.ToString());
         UnityWebRequest www = UnityWebRequest.Post(BaseUrl + "/api/ball", form);
         yield return www.SendWebRequest();
 
@@ -263,18 +263,18 @@ public class Manager : MonoBehaviour
                         AnimatorController._isBall4 = true;
                     }
 
-                    yield return new WaitForSeconds(1.6f);
+                    yield return new WaitForSeconds(1.2f);
                     goal_number = 0;
                     flag = 0;
                     ballbutton.SetActive(false);
                     Alert.text = "";
                     Alert.text = "NO GOAL";
-
                     AnimatorController.iskeeper0 = false;
                     AnimatorController.iskeeper1 = false;
                     AnimatorController.iskeeper2 = false;
                     AnimatorController.iskeeper3 = false;
                     AnimatorController.iskeeper4 = false;
+
 
                     AnimatorController._isBall0 = false;
                     AnimatorController._isBall1 = false;
@@ -336,7 +336,7 @@ public class Manager : MonoBehaviour
                         AnimatorController.iskeeper4 = true;
                     }
 
-                    yield return new WaitForSeconds(1.6f);
+                    yield return new WaitForSeconds(1.2f);
                     goal_number += 1;
                     Alert.text = "";
                     Alert.text = "GOAL : " + goal_number.ToString();
@@ -420,7 +420,7 @@ public class Manager : MonoBehaviour
                         AnimatorController._isBall4 = true;
                     }
 
-                    yield return new WaitForSeconds(1.6f);
+                    yield return new WaitForSeconds(1f);
                     goal_number = 0;
                     flag = 0;
                     ballbutton.SetActive(false);
@@ -441,7 +441,7 @@ public class Manager : MonoBehaviour
 
                     Ball.SetActive(false);
 
-                    yield return new WaitForSeconds(1f);
+                    yield return new WaitForSeconds(1.2f);
 
                     Ball.SetActive(true);
                     disable_Play.interactable = true;
@@ -493,7 +493,7 @@ public class Manager : MonoBehaviour
                         AnimatorController.iskeeper4 = true;
                     }
 
-                    yield return new WaitForSeconds(1.6f);
+                    yield return new WaitForSeconds(1.2f);
                     goal_number += 1;
                     Alert.text = "";
                     Alert.text = "GOAL : " + goal_number.ToString();
@@ -609,26 +609,31 @@ public class Manager : MonoBehaviour
     }
     public void left_up()
     {
+        disable_random.interactable = false;
         ballbutton.SetActive(false);
         StartCoroutine(Server(2));
     }
     public void left_down()
     {
+        disable_random.interactable = false;
         ballbutton.SetActive(false);
         StartCoroutine(Server(4));
     }
     public void middle()
     {
+        disable_random.interactable = false;
         ballbutton.SetActive(false);
         StartCoroutine(Server(3));
     }
     public void right_up()
     {
+        disable_random.interactable = false;
         ballbutton.SetActive(false);
         StartCoroutine(Server(0));
     }
     public void right_down()
     {
+        disable_random.interactable = false;
         ballbutton.SetActive(false);
         StartCoroutine(Server(1));
     }
